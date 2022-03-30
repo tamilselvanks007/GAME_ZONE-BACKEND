@@ -47,7 +47,7 @@ app.post("/products/more", async (req, res) => {
 // Read Method (GET)
 // creating a server for home page
 app.get("/", (req, res) => {
-  res.send("Welcome to GAME ZONE!");
+  res.send("Welcome to GAME ZONE!🎮");
 });
 
 // creating a server for raed all products
