@@ -5,11 +5,11 @@ dotenv.config();
 
 // console.log(process.env.MONGO_URL);
 
-const app = express();
+app.use(express.json()); // for parsing application/json
 
-const PORT = process.env.PORT;
+const app = express(); 
 
-app.use(express.json());
+const PORT = process.env.PORT; 
 
 // const MONGO_URL = "mongodb://localhost";
 
