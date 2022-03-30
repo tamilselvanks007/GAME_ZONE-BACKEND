@@ -44,12 +44,12 @@ app.post("/products/:productType", async (req, res) => {
   res.send(product);
 });
 
+// Read Method (GET)
 // creating a server for home page
 app.get("/", (req, res) => {
   res.send("Welcome to GAME ZONE!");
 });
 
-// Read Method (GET)
 // creating a server for raed all products
 app.get("/products", async (req, res) => {
   const product = await client
