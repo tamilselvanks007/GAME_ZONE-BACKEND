@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 
-const PORT = 4000;
+const PORT = process.env.PORT;
 
 app.use(express.json());
 
