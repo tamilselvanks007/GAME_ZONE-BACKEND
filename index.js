@@ -35,7 +35,7 @@ app.post("/products", async (req, res) => {
 });
 
 // creating a server for create all products by product type
-app.post("/products/:productType", async (req, res) => {
+app.post("/products/more", async (req, res) => {
   const data = req.body;
   const product = await client
     .db("equipments")
