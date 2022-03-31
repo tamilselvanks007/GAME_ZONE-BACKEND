@@ -10,7 +10,8 @@ const app = express();
 
 const PORT = process.env.PORT;
 
-app.use(cors()); // enable cors
+// cors cancel node's self diffence mechanism
+app.use(cors()); // it alows to use the same url for all the requests(.com)
 
 // we need to tell node to the data which i come from the body is json data 
 // middileware -> intercept all requests -> converting body to json
