@@ -12,7 +12,9 @@ const PORT = process.env.PORT;
 
 app.use(cors()); // enable cors
 
-app.use(express.json()); // for parsing application/json
+// we need to tell node to the data which i come from the body is json data 
+// middileware -> intercept all requests -> converting body to json
+app.use(express.json());
 
 // const MONGO_URL = "mongodb://localhost";
 
