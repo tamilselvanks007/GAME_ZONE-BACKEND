@@ -2,6 +2,8 @@ import express from "express";
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
+import { productsRouter } from "./routes/products.js";
+import bcrypt from "bcrypt";
 dotenv.config();
 
 // console.log(process.env.MONGO_URL);
@@ -13,7 +15,7 @@ const PORT = process.env.PORT;
 // cors cancel node's self diffence mechanism
 app.use(cors()); // it alows to use the same url for all the requests(.com)
 
-// we need to tell node to the data which i come from the body is json data 
+// we need to tell node to the data which i come from the body is json data
 // middileware -> intercept all requests -> converting body to json
 app.use(express.json());
 
@@ -27,28 +29,7 @@ async function createConnection() {
   console.log("Connected to MongoDB");
   return client;
 }
-const client = await createConnection();
-
-// Create Method (POST)
-// creating a server for create one product
-app.post("/products", async (req, res) => {
-  const data = req.body;
-  const product = await client
-    .db("equipments")
-    .collection("products")
-    .insertOne(data);
-  res.send(product);
-});
-
-// creating a server for create all products by product type
-app.post("/products/more", async (req, res) => {
-  const data = req.body;
-  const product = await client
-    .db("equipments")
-    .collection("products")
-    .insertMany(data);
-  res.send(product);
-});
+export const client = await createConnection();
 
 // Read Method (GET)
 // creating a server for home page
@@ -56,81 +37,15 @@ app.get("/", (req, res) => {
   res.send("Welcome to GAME ZONE!🎮");
 });
 
-// creating a server for raed all products
-app.get("/products", async (req, res) => {
-  const product = await client
-    .db("equipments")
-    .collection("products")
-    .find()
-    .toArray();
-  res.send(product);
-});
-
-// creating a server for read products by its type
-app.get("/products/:productType", async (req, res) => {
-  const { productType } = req.params;
-  const product = await client
-    .db("equipments")
-    .collection("products")
-    .find({ productType: productType })
-    .toArray();
-  res.send(product);
-});
-
-// creating a server for read product by id
-app.get("/products/details/:id", async (req, res) => {
-  const { id } = req.params;
-  const product = await client
-    .db("equipments")
-    .collection("products")
-    .findOne({ id: id });
-  res.send(product);
-});
-
-// Update Method (PUT)
-// creating a server for update product Details
-app.put("/products/:id", async (req, res) => {
-  const { id } = req.params;
-  const change = req.body;
-  const product = await client
-    .db("equipments")
-    .collection("products")
-    .updateOne({ id: id }, { $set: change });
-  res.send(product);
-});
-
-// creating a server for update all product details by product type
-app.put("/products/details/:productType", async (req, res) => {
-  const { productType } = req.params;
-  const change = req.body;
-  const product = await client
-    .db("equipments")
-    .collection("products")
-    .updateMany({ productType: productType }, { $set: change });
-  res.send(product);
-});
-
-// Delete Method (DELETE)
-// creating a server for delete product by id
-app.delete("/products/:id", async (req, res) => {
-  const { id } = req.params;
-  const product = await client
-    .db("equipments")
-    .collection("products")
-    .deleteOne({ id: id });
-  res.send(product);
-});
-
-// creating a server for delete all products by product type
-app.delete("/products/details/:productType", async (req, res) => {
-  const { productType } = req.params;
-  const product = await client
-    .db("equipments")
-    .collection("products")
-    .deleteMany({ productType: productType });
-  res.send(product);
-});
+app.use("/products", productsRouter);
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
+
+async function genPassword(password) { // password is a string
+  const salt = await bcrypt.genSalt(10); // 10 is the number of rounds
+  const hashpassword = await bcrypt.hash(password, salt); // password is the string and salt is the number of rounds
+  console.log({ salt, hashpassword });
+}
+genPassword("123456"); // 123456 is the password
